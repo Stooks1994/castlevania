@@ -13,9 +13,9 @@ public:
 
 	void update(double dt);
 	void render(SDL_Renderer* rend);
-	void handleEvents(SDL_Event event);
+	int handleEvents(SDL_Event event);
 
-	enum Selection { GAME_START, OPTIONS, EXIT };
+	enum Selection { MAIN_MENU, GAME_START, OPTIONS, EXIT };
 
 private:
 	SDL_Rect srcRect;

@@ -4,6 +4,7 @@ SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
 MainMenu* Game::mainMenu;
+EntityManager* Game::entityManager;
 
 int Game::resolutionX = 800;
 int Game::resolutionY = 640;
@@ -34,6 +35,7 @@ void Game::init(const char* title, int windowXPos, int windowYPos, int windowWid
 	}
 
 	Game::mainMenu = new MainMenu(Game::resolutionX, Game::resolutionY);
+	Game::entityManager = new EntityManager(tileSize);
 }
 
 void Game::update(double dt) {
@@ -48,6 +50,7 @@ void Game::render(SDL_Renderer* rend) {
 		Game::mainMenu->render(rend);
 		break;
 	case IN_GAME:
+		Game::entityManager->render(rend);
 		break;
 	case PAUSE_MENU:
 		break;
@@ -65,16 +68,16 @@ void Game::handleEvents() {
 
 		switch(Game::currScene) {
 		case MAIN_MENU:
-			mainMenu->handleEvents(Game::event);
+			updateScene(mainMenu->handleEvents(Game::event));
 			break;
 		case IN_GAME:
+			updateScene(entityManager->handleEvents(Game::event));
 			break;
 		case PAUSE_MENU:
 			break;
 		default:
 			break;
 		}
-		//player->handleEvents();
 	}
 }
 
@@ -82,4 +85,23 @@ void Game::clean() {
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
+}
+
+void Game::updateScene(int menuSelection) {
+	switch (menuSelection) {
+	case MainMenu::MAIN_MENU:
+		Game::currScene = MAIN_MENU;
+		break;
+	case MainMenu::GAME_START:
+		Game::currScene = IN_GAME;
+		break;
+	case MainMenu::OPTIONS:
+		Game::currScene = OPTIONS;
+		break;
+	case MainMenu::EXIT:
+		isRunning = false;
+		break;
+	default:
+		break;
+	}
 }

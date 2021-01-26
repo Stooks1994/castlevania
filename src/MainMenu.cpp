@@ -30,17 +30,28 @@ void MainMenu::render(SDL_Renderer* rend){
 	renderSelections(rend);
 }
 
-void MainMenu::handleEvents(SDL_Event event) {
+int MainMenu::handleEvents(SDL_Event event) {
+	int menuSelectionValue = MAIN_MENU;
+
 	if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
 		switch(event.key.keysym.sym) {
-		case SDLK_w: currSelection--; break;
-		case SDLK_s: currSelection++; break;
+		case SDLK_w:
+			currSelection--;
+			currSelection = boundCurrSelection();
+			break;
+		case SDLK_s:
+			currSelection++;
+			currSelection = boundCurrSelection();
+			break;
+		case SDLK_SPACE:
+		case SDLK_RETURN:
+			menuSelectionValue = currSelection;
+			break;
 		default: break;
 		}
 	}
 
-	currSelection = boundCurrSelection();
-	printf("%d\n", currSelection);
+	return menuSelectionValue;
 }
 
 void MainMenu::renderBackground(SDL_Renderer* rend) {

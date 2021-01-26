@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "MainMenu.h"
+#include "EntityManager.h"
 #include <iostream>
 
 class Game {
@@ -22,6 +23,7 @@ public:
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
 	static MainMenu* mainMenu;
+	static EntityManager* entityManager;
 
 	static int resolutionX;
 	static int resolutionY;
@@ -29,11 +31,13 @@ public:
 
 	static const int tileSize = 32;
 
-	enum Scene { MAIN_MENU, IN_GAME, PAUSE_MENU };
+	enum Scene { MAIN_MENU, IN_GAME, OPTIONS, PAUSE_MENU };
 
 private:
 	bool isRunning;
 	SDL_Window* window;
+
+	void updateScene(int menuSelection);
 
 };
 

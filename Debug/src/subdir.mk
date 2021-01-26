@@ -4,20 +4,26 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/EntityManager.cpp \
 ../src/Game.cpp \
 ../src/MainMenu.cpp \
+../src/Player.cpp \
 ../src/TextureManager.cpp \
 ../src/main.cpp 
 
 OBJS += \
+./src/EntityManager.o \
 ./src/Game.o \
 ./src/MainMenu.o \
+./src/Player.o \
 ./src/TextureManager.o \
 ./src/main.o 
 
 CPP_DEPS += \
+./src/EntityManager.d \
 ./src/Game.d \
 ./src/MainMenu.d \
+./src/Player.d \
 ./src/TextureManager.d \
 ./src/main.d 
 
