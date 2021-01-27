@@ -4,11 +4,13 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "Player.h"
+#include "Map.h"
+#include "Camera.h"
 
 class EntityManager {
 
 public:
-	EntityManager(int ts);
+	EntityManager(int ts, int resX, int resY);
 	virtual ~EntityManager();
 
 	void render(SDL_Renderer* rend);
@@ -17,7 +19,14 @@ public:
 
 private:
 	Player* player;
+	Map* map;
+	Camera* camera;
+
 	int tileSize;
+	int resolutionX;
+	int resolutionY;
+	int mapHeight;
+	int mapWidth;
 
 };
 

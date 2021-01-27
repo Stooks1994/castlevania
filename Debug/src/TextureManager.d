@@ -44,7 +44,7 @@ src/TextureManager.o: ../src/TextureManager.cpp ../src/TextureManager.h \
   /usr/local/include/SDL2/SDL_timer.h \
   /usr/local/include/SDL2/SDL_version.h \
   /usr/local/include/SDL2/SDL_image.h ../src/Game.h ../src/MainMenu.h \
-  ../src/EntityManager.h ../src/Player.h
+  ../src/EntityManager.h ../src/Player.h ../src/Camera.h ../src/Map.h
 
 ../src/TextureManager.h:
 
@@ -149,3 +149,7 @@ src/TextureManager.o: ../src/TextureManager.cpp ../src/TextureManager.h \
 ../src/EntityManager.h:
 
 ../src/Player.h:
+
+../src/Camera.h:
+
+../src/Map.h:

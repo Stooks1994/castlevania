@@ -1,4 +1,4 @@
-src/Game.o: ../src/Game.cpp ../src/Game.h /usr/local/include/SDL2/SDL.h \
+src/Map.o: ../src/Map.cpp ../src/Map.h /usr/local/include/SDL2/SDL.h \
   /usr/local/include/SDL2/SDL_main.h \
   /usr/local/include/SDL2/SDL_stdinc.h \
   /usr/local/include/SDL2/SDL_config.h \
@@ -43,11 +43,10 @@ src/Game.o: ../src/Game.cpp ../src/Game.h /usr/local/include/SDL2/SDL.h \
   /usr/local/include/SDL2/SDL_system.h \
   /usr/local/include/SDL2/SDL_timer.h \
   /usr/local/include/SDL2/SDL_version.h \
-  /usr/local/include/SDL2/SDL_image.h ../src/MainMenu.h \
-  ../src/TextureManager.h ../src/EntityManager.h ../src/Player.h \
-  ../src/Camera.h ../src/Map.h
+  /usr/local/include/SDL2/SDL_image.h ../src/TextureManager.h \
+  ../src/Camera.h
 
-../src/Game.h:
+../src/Map.h:
 
 /usr/local/include/SDL2/SDL.h:
 
@@ -143,14 +142,6 @@ src/Game.o: ../src/Game.cpp ../src/Game.h /usr/local/include/SDL2/SDL.h \
 
 /usr/local/include/SDL2/SDL_image.h:
 
-../src/MainMenu.h:
-
 ../src/TextureManager.h:
 
-../src/EntityManager.h:
-
-../src/Player.h:
-
 ../src/Camera.h:
-
-../src/Map.h:

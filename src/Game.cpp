@@ -35,11 +35,21 @@ void Game::init(const char* title, int windowXPos, int windowYPos, int windowWid
 	}
 
 	Game::mainMenu = new MainMenu(Game::resolutionX, Game::resolutionY);
-	Game::entityManager = new EntityManager(tileSize);
+	Game::entityManager = new EntityManager(tileSize, Game::resolutionX, Game::resolutionY);
 }
 
 void Game::update(double dt) {
-
+	switch(Game::currScene) {
+	case MAIN_MENU:
+		break;
+	case IN_GAME:
+		Game::entityManager->update(dt);
+		break;
+	case PAUSE_MENU:
+		break;
+	default:
+		break;
+	}
 }
 
 void Game::render(SDL_Renderer* rend) {

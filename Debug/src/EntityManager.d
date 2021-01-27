@@ -44,7 +44,7 @@ src/EntityManager.o: ../src/EntityManager.cpp ../src/EntityManager.h \
   /usr/local/include/SDL2/SDL_timer.h \
   /usr/local/include/SDL2/SDL_version.h \
   /usr/local/include/SDL2/SDL_image.h ../src/Player.h \
-  ../src/TextureManager.h
+  ../src/TextureManager.h ../src/Camera.h ../src/Map.h
 
 ../src/EntityManager.h:
 
@@ -145,3 +145,7 @@ src/EntityManager.o: ../src/EntityManager.cpp ../src/EntityManager.h \
 ../src/Player.h:
 
 ../src/TextureManager.h:
+
+../src/Camera.h:
+
+../src/Map.h:
