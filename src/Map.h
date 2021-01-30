@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "MapData.h"
 #include "Globals.h"
+#include "LevelLoader.h"
 
 class Map {
 
@@ -30,6 +31,7 @@ private:
 	SDL_Texture* mapTexture;
 	SDL_Texture* backgroundTexture;
 	MapData* mapData;
+	LevelLoader* level;
 
 	int backgroundW;
 	int backgroundH;

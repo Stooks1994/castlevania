@@ -8,6 +8,7 @@ CPP_SRCS += \
 ../src/EntityManager.cpp \
 ../src/Game.cpp \
 ../src/Globals.cpp \
+../src/LevelLoader.cpp \
 ../src/MainMenu.cpp \
 ../src/Map.cpp \
 ../src/MapData.cpp \
@@ -20,6 +21,7 @@ OBJS += \
 ./src/EntityManager.o \
 ./src/Game.o \
 ./src/Globals.o \
+./src/LevelLoader.o \
 ./src/MainMenu.o \
 ./src/Map.o \
 ./src/MapData.o \
@@ -32,6 +34,7 @@ CPP_DEPS += \
 ./src/EntityManager.d \
 ./src/Game.d \
 ./src/Globals.d \
+./src/LevelLoader.d \
 ./src/MainMenu.d \
 ./src/Map.d \
 ./src/MapData.d \

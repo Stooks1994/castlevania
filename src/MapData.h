@@ -14,20 +14,23 @@ class MapData {
 
 public:
 	MapData();
+	MapData(std::vector<Globals::Tile*> _tiles);
 	virtual ~MapData();
 
+	/*
 	struct Tile {
 		int xPos;
 		int yPos;
 		SDL_Texture* tileTexture;
 	};
+	*/
 
-	std::vector<Tile*> getTilesOnCamera(Camera* camera);
+	std::vector<Globals::Tile*> getTilesOnCamera(Camera* camera);
 
-	bool isTileOnCamera(Tile* tile, Camera* camera);
+	bool isTileOnCamera(Globals::Tile* tile, Camera* camera);
 
 private:
-	std::vector<Tile*> tiles;
+	std::vector<Globals::Tile*> tiles;
 
 };
 

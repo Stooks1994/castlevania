@@ -12,7 +12,13 @@ public:
 
 	const static int TILESIZE = 32;
 
-	static void set_rect(SDL_Rect* rect, int x, int y, int w, int h);
+	static void SetRect(SDL_Rect* rect, int x, int y, int w, int h);
+
+	struct Tile {
+		int xPos;
+		int yPos;
+		SDL_Texture* tileTexture;
+	};
 };
 
 #endif /* SRC_GLOBALS_H_ */
