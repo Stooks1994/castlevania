@@ -8,11 +8,12 @@
 #include "SDL2/SDL_image.h"
 #include "TextureManager.h"
 #include "Camera.h"
+#include "Globals.h"
 
 class MapData {
 
 public:
-	MapData(int ts);
+	MapData();
 	virtual ~MapData();
 
 	struct Tile {
@@ -27,7 +28,6 @@ public:
 
 private:
 	std::vector<Tile*> tiles;
-	int tileSize;
 
 };
 

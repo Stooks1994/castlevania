@@ -1,4 +1,4 @@
-src/EntityManager.o: ../src/EntityManager.cpp ../src/EntityManager.h \
+src/Globals.o: ../src/Globals.cpp ../src/Globals.h \
   /usr/local/include/SDL2/SDL.h /usr/local/include/SDL2/SDL_main.h \
   /usr/local/include/SDL2/SDL_stdinc.h \
   /usr/local/include/SDL2/SDL_config.h \
@@ -43,11 +43,9 @@ src/EntityManager.o: ../src/EntityManager.cpp ../src/EntityManager.h \
   /usr/local/include/SDL2/SDL_system.h \
   /usr/local/include/SDL2/SDL_timer.h \
   /usr/local/include/SDL2/SDL_version.h \
-  /usr/local/include/SDL2/SDL_image.h ../src/Player.h \
-  ../src/TextureManager.h ../src/Camera.h ../src/Map.h ../src/MapData.h \
-  ../src/Globals.h
+  /usr/local/include/SDL2/SDL_image.h
 
-../src/EntityManager.h:
+../src/Globals.h:
 
 /usr/local/include/SDL2/SDL.h:
 
@@ -142,15 +140,3 @@ src/EntityManager.o: ../src/EntityManager.cpp ../src/EntityManager.h \
 /usr/local/include/SDL2/SDL_version.h:
 
 /usr/local/include/SDL2/SDL_image.h:
-
-../src/Player.h:
-
-../src/TextureManager.h:
-
-../src/Camera.h:
-
-../src/Map.h:
-
-../src/MapData.h:
-
-../src/Globals.h:

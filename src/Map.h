@@ -8,11 +8,12 @@
 #include "TextureManager.h"
 #include "Camera.h"
 #include "MapData.h"
+#include "Globals.h"
 
 class Map {
 
 public:
-	Map(const char* background, int ts);
+	Map(const char* background);
 	virtual ~Map();
 
 	int getBackgroundW() { return backgroundW; };
@@ -32,7 +33,6 @@ private:
 
 	int backgroundW;
 	int backgroundH;
-	int tileSize;
 };
 
 #endif /* SRC_MAP_H_ */

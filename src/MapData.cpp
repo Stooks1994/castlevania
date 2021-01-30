@@ -1,8 +1,6 @@
 #include "MapData.h"
 
-MapData::MapData(int ts) {
-	tileSize = ts;
-
+MapData::MapData() {
 	Tile* tile = new Tile{100, 100, TextureManager::loadTexture("assets/grass_center.png")};
 	Tile* tile2 = new Tile{132, 100, TextureManager::loadTexture("assets/grass_end_right.png")};
 
@@ -25,9 +23,9 @@ std::vector<MapData::Tile*> MapData::getTilesOnCamera(Camera* camera) {
 }
 
 bool MapData::isTileOnCamera(Tile* tile, Camera* camera) {
-	if (tile->xPos + tileSize > camera->xPos &&
+	if (tile->xPos + Globals::TILESIZE > camera->xPos &&
 			tile->xPos < camera->xPos + camera->width &&
-			tile->yPos + tileSize > camera->yPos &&
+			tile->yPos + Globals::TILESIZE > camera->yPos &&
 			tile->yPos < camera->yPos + camera->height) {
 		return true;
 	}

@@ -7,6 +7,7 @@ CPP_SRCS += \
 ../src/Camera.cpp \
 ../src/EntityManager.cpp \
 ../src/Game.cpp \
+../src/Globals.cpp \
 ../src/MainMenu.cpp \
 ../src/Map.cpp \
 ../src/MapData.cpp \
@@ -18,6 +19,7 @@ OBJS += \
 ./src/Camera.o \
 ./src/EntityManager.o \
 ./src/Game.o \
+./src/Globals.o \
 ./src/MainMenu.o \
 ./src/Map.o \
 ./src/MapData.o \
@@ -29,6 +31,7 @@ CPP_DEPS += \
 ./src/Camera.d \
 ./src/EntityManager.d \
 ./src/Game.d \
+./src/Globals.d \
 ./src/MainMenu.d \
 ./src/Map.d \
 ./src/MapData.d \
