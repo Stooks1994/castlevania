@@ -1,6 +1,7 @@
 #include "Player.h"
 
 Player::Player(int x, int y, int ts) {
+	GRAVITY = 500.0;
 	tileSize = ts;
 	xVel = yVel = 0;
 	xPos = x;
@@ -34,10 +35,12 @@ void Player::updatePlayerPosition(double dt, Camera* camera, int mapWidth, int m
 	xPos += xVel * dt;
 	yPos += yVel * dt;
 
+	yPos += GRAVITY * dt;
+
 	if (xPos + tileSize > camera->width) xPos = camera->width - tileSize;
 	if (xPos < 0) xPos = 0;
 
-	if (yPos + tileSize > camera->height) yPos = camera->height - (2 * tileSize);
+	if (yPos + 2*tileSize > camera->height) yPos = camera->height - (2 * tileSize);
 	if (yPos < 0) yPos = 0;
 }
 

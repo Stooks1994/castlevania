@@ -44,7 +44,7 @@ src/Map.o: ../src/Map.cpp ../src/Map.h /usr/local/include/SDL2/SDL.h \
   /usr/local/include/SDL2/SDL_timer.h \
   /usr/local/include/SDL2/SDL_version.h \
   /usr/local/include/SDL2/SDL_image.h ../src/TextureManager.h \
-  ../src/Camera.h
+  ../src/Camera.h ../src/MapData.h
 
 ../src/Map.h:
 
@@ -145,3 +145,5 @@ src/Map.o: ../src/Map.cpp ../src/Map.h /usr/local/include/SDL2/SDL.h \
 ../src/TextureManager.h:
 
 ../src/Camera.h:
+
+../src/MapData.h:

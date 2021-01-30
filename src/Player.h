@@ -18,6 +18,8 @@ public:
 
 	enum Directions { UP, DOWN, LEFT, RIGHT };
 
+	double GRAVITY;
+
 private:
 	SDL_Rect srcRect;
 	SDL_Rect destRect;

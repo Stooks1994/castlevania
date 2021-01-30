@@ -3,7 +3,7 @@
 EntityManager::EntityManager(int ts, int resX, int resY) {
 	tileSize = ts;
 	player = new Player(50, 50, ts);
-	map = new Map("assets/trees.png");
+	map = new Map("assets/trees.png", ts);
 	camera = new Camera(0.0, 0.0, resX, resY);
 
 	resolutionX = resX;

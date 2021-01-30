@@ -45,7 +45,7 @@ src/Game.o: ../src/Game.cpp ../src/Game.h /usr/local/include/SDL2/SDL.h \
   /usr/local/include/SDL2/SDL_version.h \
   /usr/local/include/SDL2/SDL_image.h ../src/MainMenu.h \
   ../src/TextureManager.h ../src/EntityManager.h ../src/Player.h \
-  ../src/Camera.h ../src/Map.h
+  ../src/Camera.h ../src/Map.h ../src/MapData.h
 
 ../src/Game.h:
 
@@ -154,3 +154,5 @@ src/Game.o: ../src/Game.cpp ../src/Game.h /usr/local/include/SDL2/SDL.h \
 ../src/Camera.h:
 
 ../src/Map.h:
+
+../src/MapData.h:
