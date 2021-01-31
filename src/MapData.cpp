@@ -1,13 +1,7 @@
 #include "MapData.h"
 
 MapData::MapData() {
-	Globals::Tile* tile = new Globals::Tile{100, 100, TextureManager::loadTexture("assets/grass_center.png")};
-	Globals::Tile* tile2 = new Globals::Tile{132, 100, TextureManager::loadTexture("assets/grass_end_right.png")};
-	Globals::Tile* tile3 = new Globals::Tile { -10, 100, TextureManager::loadTexture("assets/grass_center.png")};
 
-	tiles.push_back(tile);
-	tiles.push_back(tile2);
-	tiles.push_back(tile3);
 }
 
 MapData::MapData(std::vector<Globals::Tile*> _tiles) {

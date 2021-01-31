@@ -17,14 +17,6 @@ public:
 	MapData(std::vector<Globals::Tile*> _tiles);
 	virtual ~MapData();
 
-	/*
-	struct Tile {
-		int xPos;
-		int yPos;
-		SDL_Texture* tileTexture;
-	};
-	*/
-
 	std::vector<Globals::Tile*> getTilesOnCamera(Camera* camera);
 
 	bool isTileOnCamera(Globals::Tile* tile, Camera* camera);

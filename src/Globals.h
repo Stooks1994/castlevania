@@ -17,6 +17,8 @@ public:
 	struct Tile {
 		int xPos;
 		int yPos;
+		int xSpriteMap;
+		int ySpriteMap;
 		SDL_Texture* tileTexture;
 	};
 };

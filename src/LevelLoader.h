@@ -5,6 +5,8 @@
 #include <fstream>
 #include <unordered_map>
 #include <vector>
+#include <utility>
+#include <regex>
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
@@ -27,7 +29,8 @@ public:
 private:
 	const char* srcFile;
 
-	std::unordered_map<std::string, SDL_Texture*> legend;
+	std::unordered_map<std::string, std::string> legend;
+	std::unordered_map<std::string, std::pair<int, int>> indices;
 	std::vector<Globals::Tile*> tiles;
 
 	SDL_Texture* tileset;
@@ -44,6 +47,8 @@ private:
 	int parseMap(std::string);
 	void parseEnemies(std::string);
 	void parseEnd();
+
+	void populateIndices(std::string);
 };
 
 #endif /* SRC_LEVELLOADER_H_ */

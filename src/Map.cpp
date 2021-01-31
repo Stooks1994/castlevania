@@ -5,11 +5,6 @@ Map::Map(const char* background) {
 	backgroundTexture = level->getBackgroundTexture();
 	mapTexture = NULL;
 	mapData = new MapData(level->getTiles());
-	/*
-	mapTexture = NULL;
-	mapData = new MapData();
-	backgroundTexture = TextureManager::loadTexture(background);
-	*/
 
 	SDL_QueryTexture(backgroundTexture, NULL, NULL, &backgroundW, &backgroundH);
 }
@@ -27,7 +22,7 @@ void Map::renderMap(SDL_Renderer* rend, Camera* camera) {
 	std::vector<Globals::Tile*> tilesOnCamera = mapData->getTilesOnCamera(camera);
 
 	for (auto& tile : tilesOnCamera) {
-		Globals::SetRect(&srcRect, 0, 0, Globals::TILESIZE, Globals::TILESIZE);
+		Globals::SetRect(&srcRect, tile->xSpriteMap, tile->ySpriteMap, Globals::TILESIZE, Globals::TILESIZE);
 		Globals::SetRect(&destRect, tile->xPos - camera->xPos, tile->yPos - camera->yPos, Globals::TILESIZE, Globals::TILESIZE);
 
 		SDL_RenderCopy(rend, tile->tileTexture, &srcRect, &destRect);
