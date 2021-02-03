@@ -44,7 +44,7 @@ src/Player.o: ../src/Player.cpp ../src/Player.h \
   /usr/local/include/SDL2/SDL_timer.h \
   /usr/local/include/SDL2/SDL_version.h \
   /usr/local/include/SDL2/SDL_image.h ../src/TextureManager.h \
-  ../src/Camera.h
+  ../src/Camera.h ../src/Globals.h ../src/Tile.h
 
 ../src/Player.h:
 
@@ -145,3 +145,7 @@ src/Player.o: ../src/Player.cpp ../src/Player.h \
 ../src/TextureManager.h:
 
 ../src/Camera.h:
+
+../src/Globals.h:
+
+../src/Tile.h:

@@ -9,20 +9,24 @@
 #include "TextureManager.h"
 #include "Camera.h"
 #include "Globals.h"
+#include "Tile.h"
 
 class MapData {
 
 public:
 	MapData();
-	MapData(std::vector<Globals::Tile*> _tiles);
+	MapData(std::vector<Tile*> _tiles);
 	virtual ~MapData();
 
-	std::vector<Globals::Tile*> getTilesOnCamera(Camera* camera);
+	std::vector<Tile*> getTilesOnCamera(Camera* camera);
+	std::vector<Tile*> getTiles() { return tiles; };
 
-	bool isTileOnCamera(Globals::Tile* tile, Camera* camera);
+	bool isTileOnCamera(Tile* tile, Camera* camera);
+
+	void printTile(int, int);
 
 private:
-	std::vector<Globals::Tile*> tiles;
+	std::vector<Tile*> tiles;
 
 };
 

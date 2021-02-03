@@ -1,5 +1,5 @@
-src/LevelLoader.o: ../src/LevelLoader.cpp ../src/LevelLoader.h \
-  /usr/local/include/SDL2/SDL.h /usr/local/include/SDL2/SDL_main.h \
+src/Tile.o: ../src/Tile.cpp ../src/Tile.h /usr/local/include/SDL2/SDL.h \
+  /usr/local/include/SDL2/SDL_main.h \
   /usr/local/include/SDL2/SDL_stdinc.h \
   /usr/local/include/SDL2/SDL_config.h \
   /usr/local/include/SDL2/SDL_platform.h \
@@ -43,10 +43,9 @@ src/LevelLoader.o: ../src/LevelLoader.cpp ../src/LevelLoader.h \
   /usr/local/include/SDL2/SDL_system.h \
   /usr/local/include/SDL2/SDL_timer.h \
   /usr/local/include/SDL2/SDL_version.h \
-  /usr/local/include/SDL2/SDL_image.h ../src/TextureManager.h \
-  ../src/Globals.h ../src/Tile.h
+  /usr/local/include/SDL2/SDL_image.h
 
-../src/LevelLoader.h:
+../src/Tile.h:
 
 /usr/local/include/SDL2/SDL.h:
 
@@ -141,9 +140,3 @@ src/LevelLoader.o: ../src/LevelLoader.cpp ../src/LevelLoader.h \
 /usr/local/include/SDL2/SDL_version.h:
 
 /usr/local/include/SDL2/SDL_image.h:
-
-../src/TextureManager.h:
-
-../src/Globals.h:
-
-../src/Tile.h:

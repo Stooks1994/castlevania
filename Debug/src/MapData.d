@@ -44,7 +44,7 @@ src/MapData.o: ../src/MapData.cpp ../src/MapData.h \
   /usr/local/include/SDL2/SDL_timer.h \
   /usr/local/include/SDL2/SDL_version.h \
   /usr/local/include/SDL2/SDL_image.h ../src/TextureManager.h \
-  ../src/Camera.h ../src/Globals.h
+  ../src/Camera.h ../src/Globals.h ../src/Tile.h
 
 ../src/MapData.h:
 
@@ -147,3 +147,5 @@ src/MapData.o: ../src/MapData.cpp ../src/MapData.h \
 ../src/Camera.h:
 
 ../src/Globals.h:
+
+../src/Tile.h:

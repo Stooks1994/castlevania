@@ -7,11 +7,13 @@
 #include <vector>
 #include <utility>
 #include <regex>
+#include <tuple>
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "TextureManager.h"
 #include "Globals.h"
+#include "Tile.h"
 
 class LevelLoader {
 
@@ -22,7 +24,7 @@ public:
 	void loadLevelFromFile();
 
 	SDL_Texture* getBackgroundTexture() { return backgroundTexture; };
-	std::vector<Globals::Tile*> getTiles() { return tiles; };
+	std::vector<Tile*> getTiles() { return tiles; };
 
 	enum Headers { SETTINGS, LEGEND, MAP, ENEMIES, END };
 
@@ -30,8 +32,8 @@ private:
 	const char* srcFile;
 
 	std::unordered_map<std::string, std::string> legend;
-	std::unordered_map<std::string, std::pair<int, int>> indices;
-	std::vector<Globals::Tile*> tiles;
+	std::unordered_map<std::string, Globals::JankTuple*> indices;
+	std::vector<Tile*> tiles;
 
 	SDL_Texture* tileset;
 	SDL_Texture* backgroundTexture;
@@ -49,6 +51,8 @@ private:
 	void parseEnd();
 
 	void populateIndices(std::string);
+
+	bool stob(std::string);
 };
 
 #endif /* SRC_LEVELLOADER_H_ */

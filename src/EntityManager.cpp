@@ -19,11 +19,11 @@ EntityManager::~EntityManager() {
 
 void EntityManager::render(SDL_Renderer* rend) {
 	map->render(rend, camera);
-	player->render(rend);
+	player->render(rend, camera);
 }
 
 void EntityManager::update(double dt) {
-	player->update(dt, camera, mapWidth, mapHeight);
+	player->update(dt, camera, mapWidth, mapHeight, map->getTiles());
 }
 
 int EntityManager::handleEvents(SDL_Event event) {

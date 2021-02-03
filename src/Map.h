@@ -19,6 +19,8 @@ public:
 
 	int getBackgroundW() { return backgroundW; };
 	int getBackgroundH() { return backgroundH; };
+	std::vector<Tile*> getTilesOnCamera(Camera* camera) { return mapData->getTilesOnCamera(camera); };
+	std::vector<Tile*> getTiles() { return mapData->getTiles(); };
 
 	void render(SDL_Renderer* rend, Camera* camera);
 	void renderBackground(SDL_Renderer* rend, Camera* camera);

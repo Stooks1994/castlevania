@@ -14,6 +14,7 @@ CPP_SRCS += \
 ../src/MapData.cpp \
 ../src/Player.cpp \
 ../src/TextureManager.cpp \
+../src/Tile.cpp \
 ../src/main.cpp 
 
 OBJS += \
@@ -27,6 +28,7 @@ OBJS += \
 ./src/MapData.o \
 ./src/Player.o \
 ./src/TextureManager.o \
+./src/Tile.o \
 ./src/main.o 
 
 CPP_DEPS += \
@@ -40,6 +42,7 @@ CPP_DEPS += \
 ./src/MapData.d \
 ./src/Player.d \
 ./src/TextureManager.d \
+./src/Tile.d \
 ./src/main.d 
 
 

@@ -11,15 +11,16 @@ public:
 	virtual ~Globals();
 
 	const static int TILESIZE = 32;
+	const static int GRAVITY = 500;
 
 	static void SetRect(SDL_Rect* rect, int x, int y, int w, int h);
+	static bool AABB(int, int, int, int, int, int, int, int);
+	static bool AABB_1D(int, int, int ,int);
 
-	struct Tile {
-		int xPos;
-		int yPos;
-		int xSpriteMap;
-		int ySpriteMap;
-		SDL_Texture* tileTexture;
+	struct JankTuple {
+		int first;
+		int second;
+		bool third;
 	};
 };
 

@@ -82,9 +82,6 @@ void LevelLoader::parseSettings(std::string _line) {
 		backgroundTexture = TextureManager::loadTexture(value.c_str());
 	else if (property.compare("indices") == 0) {
 		populateIndices(value);
-		for (auto& kv : indices) {
-			printf("%s %d %d\n", kv.first.c_str(), kv.second.first, kv.second.second);
-		}
 	}
 }
 
@@ -106,13 +103,14 @@ int LevelLoader::parseMap(std::string _line) {
 		std::string legendValue = legend[currStr];
 
 		if (legendValue.compare("BACKGROUND") != 0) {
-			Globals::Tile* tile = new Globals::Tile{
+			Tile* tile = new Tile(
 				Globals::TILESIZE * column,
 				Globals::TILESIZE * mapLineNumber,
-				indices[legendValue].first * Globals::TILESIZE,
-				indices[legendValue].second * Globals::TILESIZE,
+				indices[legendValue]->first * Globals::TILESIZE,
+				indices[legendValue]->second * Globals::TILESIZE,
+				indices[legendValue]->third,
 				tileset
-			};
+			);
 
 			tiles.push_back(tile);
 		}
@@ -130,13 +128,21 @@ void LevelLoader::parseEnd() {
 }
 
 void LevelLoader::populateIndices(std::string _value) {
-	std::regex indexRegex("\\((\\w+),([0-9]+),([0-9]+)\\)");
+	std::regex indexRegex("\\((\\w+),([0-9]+),([0-9]+),(\\w+)\\)");
 
 	auto begin = std::sregex_iterator(_value.begin(), _value.end(), indexRegex);
 	auto end = std::sregex_iterator();
 
 	for (std::sregex_iterator i = begin; i != end; ++i) {
 		std::smatch match = *i;
-		indices[match.str(1)] = std::make_pair(stoi(match.str(2)), stoi(match.str(3)));
+		indices[match.str(1)] = new Globals::JankTuple { stoi(match.str(2)), stoi(match.str(3)), stob(match.str(4)) };
 	}
+}
+
+bool LevelLoader::stob(std::string val) {
+	if (val.compare("TRUE") == 0) {
+		return true;
+	}
+
+	return false;
 }

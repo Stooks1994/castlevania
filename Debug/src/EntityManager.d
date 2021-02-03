@@ -44,8 +44,8 @@ src/EntityManager.o: ../src/EntityManager.cpp ../src/EntityManager.h \
   /usr/local/include/SDL2/SDL_timer.h \
   /usr/local/include/SDL2/SDL_version.h \
   /usr/local/include/SDL2/SDL_image.h ../src/Player.h \
-  ../src/TextureManager.h ../src/Camera.h ../src/Map.h ../src/MapData.h \
-  ../src/Globals.h ../src/LevelLoader.h
+  ../src/TextureManager.h ../src/Camera.h ../src/Globals.h ../src/Tile.h \
+  ../src/Map.h ../src/MapData.h ../src/LevelLoader.h
 
 ../src/EntityManager.h:
 
@@ -149,10 +149,12 @@ src/EntityManager.o: ../src/EntityManager.cpp ../src/EntityManager.h \
 
 ../src/Camera.h:
 
+../src/Globals.h:
+
+../src/Tile.h:
+
 ../src/Map.h:
 
 ../src/MapData.h:
-
-../src/Globals.h:
 
 ../src/LevelLoader.h:
