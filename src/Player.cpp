@@ -14,6 +14,7 @@ Player::Player(int x, int y, int ts) {
 	height = Globals::TILESIZE * 2;
 
 	red = TextureManager::loadTexture("assets/red.png");
+	currDirection = RIGHT;
 }
 
 Player::~Player() {
@@ -44,14 +45,17 @@ void Player::updatePlayerPosition(double dt, Camera* camera, int mapWidth, int m
 }
 
 void Player::updateCameraPosition(double dt, Camera* camera, int mapWidth, int mapHeight) {
-	camera->moveCamera(xVel, yVel, dt, mapWidth, mapHeight);
+	if (xPos < (camera->xPos + 0.33 * camera->width) && currDirection == LEFT)
+		camera->moveCamera(xVel, yVel, dt, mapWidth, mapHeight);
+	if (xPos > (camera->xPos + 0.66 * camera->width) && currDirection == RIGHT)
+		camera->moveCamera(xVel, yVel, dt, mapWidth, mapHeight);
 }
 
 int Player::handleEvents(SDL_Event event) {
 	if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
 		switch(event.key.keysym.sym) {
-		case SDLK_a: movePlayer(LEFT); break;
-		case SDLK_d: movePlayer(RIGHT); break;
+		case SDLK_a: movePlayer(LEFT); currDirection = LEFT; break;
+		case SDLK_d: movePlayer(RIGHT); currDirection = RIGHT; break;
 		default: break;
 		}
 	} else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
@@ -89,7 +93,7 @@ void Player::checkCollisionWithTiles(std::vector<Tile*> _tiles) {
 
 	for (auto& tile : _tiles) {
 		if (tile->hasCollision()) {
-			if (Globals::AABB((int) xPos, (int) yPos, Globals::TILESIZE, Globals::TILESIZE*2,
+			if (Globals::AABB((int) xPos, (int) yPos, width, height,
 					tile->getXPos(), tile->getYPos(), Globals::TILESIZE, Globals::TILESIZE)) {
 				collidingTiles.push_back(tile);
 			}
@@ -114,17 +118,9 @@ void Player::resolveCollision(Tile* tile) {
 	int xOverlap = abs(((int) this->xPos) + Globals::TILESIZE - tile->getXPos());
 	int yOverlap = abs(((int) this->yPos) + (Globals::TILESIZE * 2) - tile->getYPos());
 
-	this->yPos -= yOverlap;
-
-	/*
-	printf("Player: %f %f %d %d\n Tile: %d %d %d %d\n Overlap: %d %d\n",
-			this->xPos, this->yPos, Globals::TILESIZE, Globals::TILESIZE*2,
-			tile->xPos, tile->yPos, Globals::TILESIZE, Globals::TILESIZE,
-			xOverlap, yOverlap);
 	if (xOverlap <= yOverlap) {
 		this->xPos -= xOverlap;
 	} else {
 		this->yPos -= yOverlap;
 	}
-	*/
 }

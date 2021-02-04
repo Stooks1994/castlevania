@@ -40,6 +40,7 @@ private:
 	int tileSize;
 	int width;
 	int height;
+	int currDirection;
 
 	void movePlayer(int direction);
 
