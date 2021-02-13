@@ -7,10 +7,6 @@ Map::Map(const char* background) {
 	mapData = new MapData(level->getTiles());
 
 	SDL_QueryTexture(backgroundTexture, NULL, NULL, &backgroundW, &backgroundH);
-
-	mapData->printTile(7, 17);
-	mapData->printTile(8, 17);
-	mapData->printTile(9, 17);
 }
 
 Map::~Map() {

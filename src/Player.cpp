@@ -1,20 +1,16 @@
 #include "Player.h"
 
 Player::Player(int x, int y, int ts) {
-	tileSize = ts;
-	xVel = yVel = 0;
-	xPos = x;
-	yPos = y;
-	prevXPos = 0;
-	prevYPos = 0;
-	movespeed = 200;
 	playerTexture = TextureManager::loadTexture("assets/knight_left.png");
-
-	width = Globals::TILESIZE;
-	height = Globals::TILESIZE * 2;
 
 	red = TextureManager::loadTexture("assets/red.png");
 	currDirection = RIGHT;
+
+	jumping = true;
+	jumpKeyDown = false;
+
+	inputManager = new InputManager();
+	stats = new Stats(0, 0, x, y, 350, -1500, -1500, 0.99, Globals::TILESIZE * 2, Globals::TILESIZE);
 }
 
 Player::~Player() {
@@ -23,8 +19,7 @@ Player::~Player() {
 
 void Player::render(SDL_Renderer* rend, Camera* camera) {
 	Globals::SetRect(&srcRect, 0, 0, Globals::TILESIZE, Globals::TILESIZE);
-	Globals::SetRect(&destRect, (int) xPos - camera->xPos, (int) yPos - camera->yPos, Globals::TILESIZE, Globals::TILESIZE * 2);
-
+	Globals::SetRect(&destRect, (int) stats->getXPos() - camera->xPos, (int) stats->getYPos() - camera->yPos, stats->getWidth(), stats->getHeight());
 	SDL_RenderCopy(rend, playerTexture, &srcRect, &destRect);
 }
 
@@ -34,21 +29,34 @@ void Player::update(double dt, Camera* camera, int mapWidth, int mapHeight, std:
 }
 
 void Player::updatePlayerPosition(double dt, Camera* camera, int mapWidth, int mapHeight, std::vector<Tile*> _tiles) {
-	prevXPos = xPos;
-	prevYPos = yPos;
+	stats->setYVel(Globals::GRAVITY);
 
-	xPos += xVel * dt;
-	yPos += (yVel * dt) + (Globals::GRAVITY * dt);
+	if (jumpKeyDown)  {
+		jump();
+	} else {
+		if (jumping) {
+			stats->setYVel(Globals::GRAVITY);
+		} else {
+			resetJumpForce();
+		}
+	}
+
+	stats->incrementXPos(stats->getXVel() * dt);
+	stats->incrementYPos(stats->getYVel() * dt);
 
 	checkCollisionWithTiles(_tiles);
 	boundPlayerToCamera(dt, camera);
 }
 
 void Player::updateCameraPosition(double dt, Camera* camera, int mapWidth, int mapHeight) {
-	if (xPos < (camera->xPos + 0.33 * camera->width) && currDirection == LEFT)
-		camera->moveCamera(xVel, yVel, dt, mapWidth, mapHeight);
-	if (xPos > (camera->xPos + 0.66 * camera->width) && currDirection == RIGHT)
-		camera->moveCamera(xVel, yVel, dt, mapWidth, mapHeight);
+	if (stats->getXPos() < (camera->xPos + 0.33 * camera->width) && currDirection == LEFT)
+		camera->moveCamera(stats->getXVel(), stats->getYVel(), dt, mapWidth, mapHeight);
+	else if (stats->getXPos() > (camera->xPos + 0.66 * camera->width) && currDirection == RIGHT)
+		camera->moveCamera(stats->getXVel(), stats->getYVel(), dt, mapWidth, mapHeight);
+	else if (stats->getYPos() < (camera->yPos + 0.33 * camera->height) && currDirection == UP)
+		camera->moveCamera(stats->getXVel(), stats->getYVel(), dt, mapWidth, mapHeight);
+	else if (stats->getXPos() > (camera->yPos + 0.66 * camera->height) && currDirection == DOWN)
+		camera->moveCamera(stats->getXVel(), stats->getYVel(), dt, mapWidth, mapHeight);
 }
 
 int Player::handleEvents(SDL_Event event) {
@@ -56,12 +64,14 @@ int Player::handleEvents(SDL_Event event) {
 		switch(event.key.keysym.sym) {
 		case SDLK_a: movePlayer(LEFT); currDirection = LEFT; break;
 		case SDLK_d: movePlayer(RIGHT); currDirection = RIGHT; break;
+		case SDLK_SPACE: jumpKeyDown = true; break;
 		default: break;
 		}
 	} else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
 		switch(event.key.keysym.sym) {
 		case SDLK_a: movePlayer(RIGHT); break;
 		case SDLK_d: movePlayer(LEFT); break;
+		case SDLK_SPACE: jumpKeyDown = false; break;
 		default: break;
 		}
 	}
@@ -71,56 +81,70 @@ int Player::handleEvents(SDL_Event event) {
 
 void Player::movePlayer(int direction) {
 	switch(direction) {
-	case LEFT: xVel -= movespeed; break;
-	case RIGHT: xVel += movespeed; break;
+	case LEFT: stats->incrementXVel(stats->getMovespeed() * -1); break;
+	case RIGHT: stats->incrementXVel(stats->getMovespeed()); break;
 	}
 }
 
-void Player::boundPlayerToCamera(double dt, Camera* camera) {
-	if (xPos + width > camera->width)
-		xPos = camera->width - width;
-	if (xPos < 0)
-		xPos = 0;
+void Player::jump() {
+	jumping = true;
+	stats->incrementYVel(stats->getJumpForce());
+	stats->setJumpForce(stats->getJumpForce() * stats->getJumpDampening());
+}
 
-	if (yPos + height > camera->height)
-		yPos = camera->height - height;
-	if (yPos < 0)
-		yPos = 0;
+void Player::boundPlayerToCamera(double dt, Camera* camera) {
+	double x = stats->getXPos();
+	double w = stats->getWidth();
+	double y = stats->getYPos();
+	double h = stats->getHeight();
+
+	if (x + w > camera->width)
+		stats->setXPos(camera->width - w);
+	if (x < 0)
+		stats->setXPos(0);
+
+	if (y + h > camera->height)
+		stats->setYPos(camera->height - h);
+	if (y < 0)
+		stats->setYPos(0);
 }
 
 void Player::checkCollisionWithTiles(std::vector<Tile*> _tiles) {
 	std::vector<Tile*> collidingTiles;
 
+	double x = stats->getXPos();
+	double y = stats->getYPos();
+	double w = stats->getWidth();
+	double h = stats->getHeight();
+
 	for (auto& tile : _tiles) {
 		if (tile->hasCollision()) {
-			if (Globals::AABB((int) xPos, (int) yPos, width, height,
+			if (Globals::AABB((int) x, (int) y, w, h,
 					tile->getXPos(), tile->getYPos(), Globals::TILESIZE, Globals::TILESIZE)) {
 				collidingTiles.push_back(tile);
 			}
 		}
 	}
 
-	//printf("%d\n", collidingTiles.size());
-	//printf("%f %f\n", this->xPos, this->yPos);
-
 	for (auto& tile : collidingTiles) {
 		if (tile->getTexture() != red) {
 			tile->setTexture(red);
-			printf("Tiles: %d %d      Player: %f %f\n", tile->getXPos(), tile->getYPos(), xPos, yPos);
 		}
-		if (Globals::AABB((int) xPos, (int) yPos, width, height, tile->getXPos(), tile->getYPos(), Globals::TILESIZE, Globals::TILESIZE)) {
+		if (Globals::AABB((int) stats->getXPos(), (int) stats->getYPos(), stats->getWidth(), stats->getHeight(), tile->getXPos(), tile->getYPos(), Globals::TILESIZE, Globals::TILESIZE)) {
 			resolveCollision(tile);
 		}
 	}
 }
 
 void Player::resolveCollision(Tile* tile) {
-	int xOverlap = abs(((int) this->xPos) + Globals::TILESIZE - tile->getXPos());
-	int yOverlap = abs(((int) this->yPos) + (Globals::TILESIZE * 2) - tile->getYPos());
+	int xOverlap = abs(((int) stats->getXPos()) + stats->getWidth() - tile->getXPos());
+	int yOverlap = abs(((int) stats->getYPos()) + stats->getHeight() - tile->getYPos());
+
+	jumping = false;
 
 	if (xOverlap <= yOverlap) {
-		this->xPos -= xOverlap;
+		stats->incrementXPos(xOverlap * -1);
 	} else {
-		this->yPos -= yOverlap;
+		stats->incrementYPos(yOverlap * -1);
 	}
 }

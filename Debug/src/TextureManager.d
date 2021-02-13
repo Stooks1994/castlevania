@@ -44,9 +44,9 @@ src/TextureManager.o: ../src/TextureManager.cpp ../src/TextureManager.h \
   /usr/local/include/SDL2/SDL_timer.h \
   /usr/local/include/SDL2/SDL_version.h \
   /usr/local/include/SDL2/SDL_image.h ../src/Game.h ../src/MainMenu.h \
-  ../src/EntityManager.h ../src/Player.h ../src/Camera.h \
-  ../src/Globals.h ../src/Tile.h ../src/Map.h ../src/MapData.h \
-  ../src/LevelLoader.h
+  ../src/EntityManager.h ../src/Player.h ../src/InputManager.h \
+  ../src/Globals.h ../src/Camera.h ../src/Tile.h ../src/Stats.h \
+  ../src/Map.h ../src/MapData.h ../src/LevelLoader.h
 
 ../src/TextureManager.h:
 
@@ -152,11 +152,15 @@ src/TextureManager.o: ../src/TextureManager.cpp ../src/TextureManager.h \
 
 ../src/Player.h:
 
-../src/Camera.h:
+../src/InputManager.h:
 
 ../src/Globals.h:
 
+../src/Camera.h:
+
 ../src/Tile.h:
+
+../src/Stats.h:
 
 ../src/Map.h:
 

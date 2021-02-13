@@ -8,6 +8,8 @@ public:
 	virtual ~Camera();
 
 	void moveCamera(double xVel, double yVel, double dt, int mapWidth, int mapHeight);
+	void moveCameraX(double, double, int, int);
+	void moveCameraY(double, double, int, int);
 
 	double xPos;
 	double yPos;

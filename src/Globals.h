@@ -17,6 +17,8 @@ public:
 	static bool AABB(int, int, int, int, int, int, int, int);
 	static bool AABB_1D(int, int, int ,int);
 
+	enum Actions { JUMP, MOVE_LEFT, MOVE_RIGHT, END };
+
 	struct JankTuple {
 		int first;
 		int second;

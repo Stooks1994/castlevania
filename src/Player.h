@@ -7,9 +7,11 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "TextureManager.h"
+#include "InputManager.h"
 #include "Camera.h"
 #include "Globals.h"
 #include "Tile.h"
+#include "Stats.h"
 
 class Player {
 
@@ -21,6 +23,8 @@ public:
 	int handleEvents(SDL_Event event);
 	void render(SDL_Renderer*, Camera*);
 
+	bool isJumping() { return jumping; };
+
 	enum Directions { UP, DOWN, LEFT, RIGHT };
 
 private:
@@ -28,21 +32,18 @@ private:
 	SDL_Rect destRect;
 	SDL_Texture* playerTexture;
 	SDL_Texture* red;
+	InputManager* inputManager;
+	Stats* stats;
 
-	double xVel;
-	double yVel;
-	double xPos;
-	double yPos;
-	double prevXPos;
-	double prevYPos;
-	double movespeed;
-
-	int tileSize;
-	int width;
-	int height;
 	int currDirection;
 
+	bool jumping;
+	bool jumpKeyDown;
+
 	void movePlayer(int direction);
+	void jump();
+	void jump(double);
+	void resetJumpForce() { stats->setJumpForce(stats->getJumpForceMax()); };
 
 	void updatePlayerPosition(double dt, Camera* camera, int mapWidth, int mapHeight, std::vector<Tile*> _tiles);
 	void updateCameraPosition(double dt, Camera* camera, int mapWidth, int mapHeight);

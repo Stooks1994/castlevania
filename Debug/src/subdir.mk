@@ -8,11 +8,13 @@ CPP_SRCS += \
 ../src/EntityManager.cpp \
 ../src/Game.cpp \
 ../src/Globals.cpp \
+../src/InputManager.cpp \
 ../src/LevelLoader.cpp \
 ../src/MainMenu.cpp \
 ../src/Map.cpp \
 ../src/MapData.cpp \
 ../src/Player.cpp \
+../src/Stats.cpp \
 ../src/TextureManager.cpp \
 ../src/Tile.cpp \
 ../src/main.cpp 
@@ -22,11 +24,13 @@ OBJS += \
 ./src/EntityManager.o \
 ./src/Game.o \
 ./src/Globals.o \
+./src/InputManager.o \
 ./src/LevelLoader.o \
 ./src/MainMenu.o \
 ./src/Map.o \
 ./src/MapData.o \
 ./src/Player.o \
+./src/Stats.o \
 ./src/TextureManager.o \
 ./src/Tile.o \
 ./src/main.o 
@@ -36,11 +40,13 @@ CPP_DEPS += \
 ./src/EntityManager.d \
 ./src/Game.d \
 ./src/Globals.d \
+./src/InputManager.d \
 ./src/LevelLoader.d \
 ./src/MainMenu.d \
 ./src/Map.d \
 ./src/MapData.d \
 ./src/Player.d \
+./src/Stats.d \
 ./src/TextureManager.d \
 ./src/Tile.d \
 ./src/main.d 
