@@ -39,6 +39,9 @@ void Game::init(const char* title, int windowXPos, int windowYPos, int windowWid
 }
 
 void Game::update(double dt) {
+	InputManager* input = InputManager::getInstance();
+	input->update(Game::event);
+
 	switch(Game::currScene) {
 	case MAIN_MENU:
 		break;
@@ -72,6 +75,7 @@ void Game::render(SDL_Renderer* rend) {
 }
 
 void Game::handleEvents() {
+	/*
 	while(SDL_PollEvent(&event) != 0) {
 		if (event.type == SDL_QUIT)
 			isRunning = false;
@@ -88,6 +92,19 @@ void Game::handleEvents() {
 		default:
 			break;
 		}
+	}
+	*/
+	switch(Game::currScene) {
+	case MAIN_MENU:
+		updateScene(mainMenu->handleEvents(Game::event));
+		break;
+	case IN_GAME:
+		updateScene(entityManager->handleEvents(Game::event));
+		break;
+	case PAUSE_MENU:
+		break;
+	default:
+		break;
 	}
 }
 

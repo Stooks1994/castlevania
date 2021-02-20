@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Game.h"
+#include "InputManager.h"
 
 Game* game = nullptr;
 
@@ -12,7 +13,7 @@ int main(int argc, const char* argv[]) {
 	Uint32 last_t = 0;
 	Uint32 curr_t = 0;
 
-	while (game->getIsRunning()) {
+	while (InputManager::getInstance()->isRunning()) {
 		curr_t = SDL_GetTicks();
 
 		if (last_t < curr_t) {

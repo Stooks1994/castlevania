@@ -26,6 +26,8 @@ public:
 	bool isJumping() { return jumping; };
 
 	enum Directions { UP, DOWN, LEFT, RIGHT };
+	enum KeyEventType { KEY_UP, KEY_DOWN };
+	enum State { STOPPED, MOVING_LEFT, MOVING_RIGHT, JUMPING };
 
 private:
 	SDL_Rect srcRect;
@@ -36,11 +38,13 @@ private:
 	Stats* stats;
 
 	int currDirection;
+	int state;
 
 	bool jumping;
 	bool jumpKeyDown;
 
 	void movePlayer(int direction);
+	void stopPlayer(int direction);
 	void jump();
 	void jump(double);
 	void resetJumpForce() { stats->setJumpForce(stats->getJumpForceMax()); };
@@ -51,6 +55,8 @@ private:
 	void boundPlayerToCamera(double dt, Camera* camera);
 	void checkCollisionWithTiles(std::vector<Tile*>);
 	void resolveCollision(Tile*);
+
+	void handleEvents(std::unordered_set<int> actions, int keyEventType);
 };
 
 #endif /* SRC_PLAYER_H_ */

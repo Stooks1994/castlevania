@@ -33,3 +33,10 @@ bool Globals::AABB_1D (int x1, int w1, int x2, int w2) {
 
 	return false;
 }
+
+bool Globals::Contains(std::unordered_set<int> set, int target) {
+	if (set.find(target) != set.end())
+		return true;
+
+	return false;
+}

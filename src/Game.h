@@ -5,6 +5,7 @@
 #include "SDL2/SDL_image.h"
 #include "MainMenu.h"
 #include "EntityManager.h"
+#include "InputManager.h"
 #include <iostream>
 
 class Game {

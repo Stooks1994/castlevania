@@ -31,24 +31,21 @@ void MainMenu::render(SDL_Renderer* rend){
 }
 
 int MainMenu::handleEvents(SDL_Event event) {
+	InputManager* input = InputManager::getInstance();
+	std::unordered_set<int> actions = input->getActionsDown();
+
 	int menuSelectionValue = MAIN_MENU;
 
-	if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
-		switch(event.key.keysym.sym) {
-		case SDLK_w:
-			currSelection--;
-			currSelection = boundCurrSelection();
-			break;
-		case SDLK_s:
-			currSelection++;
-			currSelection = boundCurrSelection();
-			break;
-		case SDLK_SPACE:
-		case SDLK_RETURN:
-			menuSelectionValue = currSelection;
-			break;
-		default: break;
-		}
+	if (Globals::Contains(actions, Globals::UP)) {
+		currSelection--;
+		currSelection = boundCurrSelection();
+	}
+	else if (Globals::Contains(actions, Globals::DOWN)) {
+		currSelection++;
+		currSelection = boundCurrSelection();
+	}
+	else if (Globals::Contains(actions, Globals::SELECT)) {
+		menuSelectionValue = currSelection;
 	}
 
 	return menuSelectionValue;

@@ -5,6 +5,7 @@ Player::Player(int x, int y, int ts) {
 
 	red = TextureManager::loadTexture("assets/red.png");
 	currDirection = RIGHT;
+	state = STOPPED;
 
 	jumping = true;
 	jumpKeyDown = false;
@@ -60,6 +61,15 @@ void Player::updateCameraPosition(double dt, Camera* camera, int mapWidth, int m
 }
 
 int Player::handleEvents(SDL_Event event) {
+	InputManager* input = InputManager::getInstance();
+	std::unordered_set<int> actionsDown = input->getActionsDown();
+	std::unordered_set<int> actionsUp = input->getActionsUp();
+
+	handleEvents(actionsDown, KEY_DOWN);
+	handleEvents(actionsUp, KEY_UP);
+
+	printf("%f\n", stats->getXVel());
+	/*
 	if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
 		switch(event.key.keysym.sym) {
 		case SDLK_a: movePlayer(LEFT); currDirection = LEFT; break;
@@ -75,15 +85,60 @@ int Player::handleEvents(SDL_Event event) {
 		default: break;
 		}
 	}
+	*/
 
 	return 1;
 }
 
+void Player::handleEvents(std::unordered_set<int> actions, int keyEventType) {
+	switch (keyEventType) {
+	case KEY_DOWN:
+		if (Globals::Contains(actions, Globals::LEFT)) {
+			if (state != MOVING_LEFT)
+				movePlayer(LEFT);
+		}
+
+		else if (Globals::Contains(actions, Globals::RIGHT)) {
+			if (state != MOVING_RIGHT)
+				movePlayer(RIGHT);
+		}
+
+		break;
+	case KEY_UP:
+		if (Globals::Contains(actions, Globals::LEFT)) {
+			if (state == MOVING_LEFT)
+				stopPlayer(LEFT);
+		}
+
+		else if (Globals::Contains(actions, Globals::RIGHT)) {
+			if (state == MOVING_RIGHT)
+				stopPlayer(RIGHT);
+		}
+
+		break;
+	}
+}
+
 void Player::movePlayer(int direction) {
 	switch(direction) {
-	case LEFT: stats->incrementXVel(stats->getMovespeed() * -1); break;
-	case RIGHT: stats->incrementXVel(stats->getMovespeed()); break;
+	case LEFT:
+		stats->incrementXVel(stats->getMovespeed() * -1);
+		state = MOVING_LEFT;
+		break;
+	case RIGHT:
+		stats->incrementXVel(stats->getMovespeed());
+		state = MOVING_RIGHT;
+		break;
 	}
+}
+
+void Player::stopPlayer(int direction) {
+	switch(direction) {
+	case RIGHT: stats->incrementXVel(stats->getMovespeed() * -1); break;
+	case LEFT: stats->incrementXVel(stats->getMovespeed()); break;
+	}
+
+	state = STOPPED;
 }
 
 void Player::jump() {
