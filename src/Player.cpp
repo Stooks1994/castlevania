@@ -50,9 +50,9 @@ void Player::updatePlayerPosition(double dt, Camera* camera, int mapWidth, int m
 }
 
 void Player::updateCameraPosition(double dt, Camera* camera, int mapWidth, int mapHeight) {
-	if (stats->getXPos() < (camera->xPos + 0.33 * camera->width) && currDirection == LEFT)
+	if (stats->getXPos() < (camera->xPos + 0.33 * camera->width) && state == MOVING_LEFT)
 		camera->moveCamera(stats->getXVel(), stats->getYVel(), dt, mapWidth, mapHeight);
-	else if (stats->getXPos() > (camera->xPos + 0.66 * camera->width) && currDirection == RIGHT)
+	else if (stats->getXPos() > (camera->xPos + 0.66 * camera->width) && state == MOVING_RIGHT)
 		camera->moveCamera(stats->getXVel(), stats->getYVel(), dt, mapWidth, mapHeight);
 	else if (stats->getYPos() < (camera->yPos + 0.33 * camera->height) && currDirection == UP)
 		camera->moveCamera(stats->getXVel(), stats->getYVel(), dt, mapWidth, mapHeight);
@@ -68,52 +68,44 @@ int Player::handleEvents(SDL_Event event) {
 	handleEvents(actionsDown, KEY_DOWN);
 	handleEvents(actionsUp, KEY_UP);
 
-	printf("%f\n", stats->getXVel());
-	/*
-	if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
-		switch(event.key.keysym.sym) {
-		case SDLK_a: movePlayer(LEFT); currDirection = LEFT; break;
-		case SDLK_d: movePlayer(RIGHT); currDirection = RIGHT; break;
-		case SDLK_SPACE: jumpKeyDown = true; break;
-		default: break;
-		}
-	} else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
-		switch(event.key.keysym.sym) {
-		case SDLK_a: movePlayer(RIGHT); break;
-		case SDLK_d: movePlayer(LEFT); break;
-		case SDLK_SPACE: jumpKeyDown = false; break;
-		default: break;
-		}
-	}
-	*/
-
 	return 1;
 }
 
 void Player::handleEvents(std::unordered_set<int> actions, int keyEventType) {
 	switch (keyEventType) {
 	case KEY_DOWN:
+		printf("KEY_DOWN\n");
 		if (Globals::Contains(actions, Globals::LEFT)) {
-			if (state != MOVING_LEFT)
+			if (state != MOVING_LEFT) {
+				currDirection = LEFT;
 				movePlayer(LEFT);
+			}
 		}
 
-		else if (Globals::Contains(actions, Globals::RIGHT)) {
-			if (state != MOVING_RIGHT)
+		if (Globals::Contains(actions, Globals::RIGHT)) {
+			if (state != MOVING_RIGHT) {
+				currDirection = RIGHT;
 				movePlayer(RIGHT);
+			}
 		}
 
 		break;
 	case KEY_UP:
+		printf("KEY_UP\n");
+
 		if (Globals::Contains(actions, Globals::LEFT)) {
-			if (state == MOVING_LEFT)
+			if (state != STOPPED) {
 				stopPlayer(LEFT);
+			}
 		}
 
-		else if (Globals::Contains(actions, Globals::RIGHT)) {
-			if (state == MOVING_RIGHT)
+		if (Globals::Contains(actions, Globals::RIGHT)) {
+			if (state != STOPPED) {
 				stopPlayer(RIGHT);
+			}
 		}
+
+		state = STOPPED;
 
 		break;
 	}
@@ -137,8 +129,6 @@ void Player::stopPlayer(int direction) {
 	case RIGHT: stats->incrementXVel(stats->getMovespeed() * -1); break;
 	case LEFT: stats->incrementXVel(stats->getMovespeed()); break;
 	}
-
-	state = STOPPED;
 }
 
 void Player::jump() {
@@ -153,13 +143,13 @@ void Player::boundPlayerToCamera(double dt, Camera* camera) {
 	double y = stats->getYPos();
 	double h = stats->getHeight();
 
-	if (x + w > camera->width)
-		stats->setXPos(camera->width - w);
+	if (x + w > camera->xPos + camera->width)
+		stats->setXPos(camera->xPos + camera->width - w);
 	if (x < 0)
 		stats->setXPos(0);
 
-	if (y + h > camera->height)
-		stats->setYPos(camera->height - h);
+	if (y + h > camera->yPos + camera->height)
+		stats->setYPos(camera->yPos + camera->height - h);
 	if (y < 0)
 		stats->setYPos(0);
 }
@@ -185,9 +175,14 @@ void Player::checkCollisionWithTiles(std::vector<Tile*> _tiles) {
 		if (tile->getTexture() != red) {
 			tile->setTexture(red);
 		}
+
 		if (Globals::AABB((int) stats->getXPos(), (int) stats->getYPos(), stats->getWidth(), stats->getHeight(), tile->getXPos(), tile->getYPos(), Globals::TILESIZE, Globals::TILESIZE)) {
 			resolveCollision(tile);
 		}
+	}
+
+	if (collidingTiles.size() != 0) {
+		checkCollisionWithTiles(collidingTiles);
 	}
 }
 
