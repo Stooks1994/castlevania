@@ -20,6 +20,7 @@ public:
 
 	std::unordered_set<int> getActionsDown();
 	std::unordered_set<int> getActionsUp();
+	std::unordered_set<int> getActionsPressed();
 
 	bool isLocked() { return locked; };
 	bool isRunning() { return running; };
@@ -33,6 +34,7 @@ private:
 
 	std::unordered_set<SDL_Keycode> keysDown;
 	std::unordered_set<SDL_Keycode> keysUp;
+	std::unordered_map<SDL_Keycode, bool> keysPressed;
 
 	bool running;
 	bool locked;
@@ -41,6 +43,7 @@ private:
 	void setKeyUp(SDL_Keycode key) { keysUp.insert(key); };
 	std::unordered_set<SDL_Keycode> getDownKeys() { return keysDown; };
 	std::unordered_set<SDL_Keycode> getUpKeys() { return keysUp; };
+	std::unordered_set<SDL_Keycode> getPressedKeys();
 };
 
 #endif /* SRC_INPUTMANAGER_H_ */

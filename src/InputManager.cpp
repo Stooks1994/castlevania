@@ -29,9 +29,28 @@ void InputManager::update(SDL_Event event) {
 		case SDL_KEYDOWN: setKeyDown(event.key.keysym.sym); break;
 		case SDL_KEYUP: setKeyUp(event.key.keysym.sym); break;
 		case SDL_QUIT: running = false; break;
-
 		}
 	}
+
+	for (auto& key : keysDown) {
+		keysPressed[key] = true;
+	}
+
+	for (auto& key : keysUp) {
+		keysPressed[key] = false;
+	}
+}
+
+std::unordered_set<int> InputManager::getPressedKeys() {
+	std::unordered_set<int> keys;
+
+	for (auto& kvp : keysPressed) {
+		if (kvp.second) {
+			keys.insert(kvp.first);
+		}
+	}
+
+	return keys;
 }
 
 std::unordered_set<int> InputManager::getActionsDown() {
@@ -44,4 +63,8 @@ std::unordered_set<int> InputManager::getActionsUp() {
 	return controls->getActionsFromInput(keysUp);
 }
 
+std::unordered_set<int> InputManager::getActionsPressed() {
+	ControlMapper* controls = ControlMapper::getInstance();
+	return controls->getActionsFromInput(getPressedKeys());
+}
 

@@ -43,9 +43,17 @@ void Player::updatePlayerPosition(double dt, Camera* camera, int mapWidth, int m
 	}
 
 	stats->incrementXPos(stats->getXVel() * dt);
+	checkCollisionWithTiles(_tiles, X);
+
+	stats->incrementYPos(stats->getYVel() * dt);
+	checkCollisionWithTiles(_tiles, Y);
+
+	/*
+	stats->incrementXPos(stats->getXVel() * dt);
 	stats->incrementYPos(stats->getYVel() * dt);
 
 	checkCollisionWithTiles(_tiles);
+	*/
 	boundPlayerToCamera(dt, camera);
 }
 
@@ -62,11 +70,11 @@ void Player::updateCameraPosition(double dt, Camera* camera, int mapWidth, int m
 
 int Player::handleEvents(SDL_Event event) {
 	InputManager* input = InputManager::getInstance();
-	std::unordered_set<int> actionsDown = input->getActionsDown();
-	std::unordered_set<int> actionsUp = input->getActionsUp();
+	std::unordered_set<int> actionsPressed = input->getActionsPressed();
 
-	handleEvents(actionsDown, KEY_DOWN);
-	handleEvents(actionsUp, KEY_UP);
+	stats->setXVel(0);
+
+	handleEvents(actionsPressed, KEY_PRESSED);
 
 	return 1;
 }
@@ -74,40 +82,29 @@ int Player::handleEvents(SDL_Event event) {
 void Player::handleEvents(std::unordered_set<int> actions, int keyEventType) {
 	switch (keyEventType) {
 	case KEY_DOWN:
-		printf("KEY_DOWN\n");
-		if (Globals::Contains(actions, Globals::LEFT)) {
-			if (state != MOVING_LEFT) {
-				currDirection = LEFT;
-				movePlayer(LEFT);
-			}
-		}
-
-		if (Globals::Contains(actions, Globals::RIGHT)) {
-			if (state != MOVING_RIGHT) {
-				currDirection = RIGHT;
-				movePlayer(RIGHT);
-			}
-		}
-
 		break;
 	case KEY_UP:
-		printf("KEY_UP\n");
-
+		break;
+	case KEY_PRESSED:
 		if (Globals::Contains(actions, Globals::LEFT)) {
-			if (state != STOPPED) {
-				stopPlayer(LEFT);
-			}
+			movePlayer(LEFT);
 		}
 
 		if (Globals::Contains(actions, Globals::RIGHT)) {
-			if (state != STOPPED) {
-				stopPlayer(RIGHT);
-			}
+			movePlayer(RIGHT);
 		}
 
-		state = STOPPED;
+		if (Globals::Contains(actions, Globals::JUMP)) {
+			jumpKeyDown = true;
+		} else {
+			jumpKeyDown = false;
+		}
 
 		break;
+	}
+
+	if (actions.size() == 0) {
+		state = STOPPED;
 	}
 }
 
@@ -154,7 +151,7 @@ void Player::boundPlayerToCamera(double dt, Camera* camera) {
 		stats->setYPos(0);
 }
 
-void Player::checkCollisionWithTiles(std::vector<Tile*> _tiles) {
+void Player::checkCollisionWithTiles(std::vector<Tile*> _tiles, Axis axis) {
 	std::vector<Tile*> collidingTiles;
 
 	double x = stats->getXPos();
@@ -177,24 +174,90 @@ void Player::checkCollisionWithTiles(std::vector<Tile*> _tiles) {
 		}
 
 		if (Globals::AABB((int) stats->getXPos(), (int) stats->getYPos(), stats->getWidth(), stats->getHeight(), tile->getXPos(), tile->getYPos(), Globals::TILESIZE, Globals::TILESIZE)) {
-			resolveCollision(tile);
+			resolveCollision(tile, axis);
 		}
-	}
-
-	if (collidingTiles.size() != 0) {
-		checkCollisionWithTiles(collidingTiles);
 	}
 }
 
-void Player::resolveCollision(Tile* tile) {
-	int xOverlap = abs(((int) stats->getXPos()) + stats->getWidth() - tile->getXPos());
-	int yOverlap = abs(((int) stats->getYPos()) + stats->getHeight() - tile->getYPos());
+void Player::resolveCollision(Tile* tile, Axis axis) {
+	switch(axis) {
+		case X: {
+			double xOverlap = 0;
+			double xVel = stats->getXVel();
+
+			if (xVel < 0) {
+				xOverlap = tile->getXPos() + Globals::TILESIZE - stats->getXPos();
+				stats->incrementXPos(xOverlap);
+			} else {
+				xOverlap = stats->getXPos() + stats->getWidth() - tile->getXPos();
+				stats->incrementXPos(xOverlap * -1);
+			}
+
+			break;
+		}
+		case Y: {
+			double yOverlap = 0;
+			double yVel = stats->getYVel();
+
+			if (yVel < 0) {
+				yOverlap = tile->getYPos() + Globals::TILESIZE - stats->getYPos();
+				stats->incrementYPos(yOverlap);
+			} else {
+				yOverlap = stats->getYPos() + stats->getHeight() - tile->getYPos();
+				stats->incrementYPos(yOverlap * -1);
+			}
+
+			break;
+		}
+	}
 
 	jumping = false;
+}
 
-	if (xOverlap <= yOverlap) {
-		stats->incrementXPos(xOverlap * -1);
+int Player::getOverlappingQuadrant(Tile* tile) {
+	std::pair<int, int> overlapCenter = calcOverlapCenter(tile);
+
+	if (overlapCenter.first > (tile->getXPos() + Globals::TILESIZE) / 2) {
+		if (overlapCenter.second > (tile->getYPos() + Globals::TILESIZE) / 2) {
+			return BOTTOM_RIGHT_QUAD;
+		} else {
+			return BOTTOM_LEFT_QUAD;
+		}
 	} else {
-		stats->incrementYPos(yOverlap * -1);
+		if (overlapCenter.second > (tile->getYPos() + Globals::TILESIZE) / 2) {
+			return TOP_RIGHT_QUAD;
+		} else {
+			return TOP_LEFT_QUAD;
+		}
 	}
+
+}
+
+std::pair<int, int> Player::calcOverlapCenter(Tile* tile) {
+	std::pair<int, int> center;
+	int xPos, yPos, xOverlap, yOverlap, centerX, centerY = 0;
+
+	if (stats->getXPos() > tile->getXPos()) {
+		xOverlap = tile->getXPos() + Globals::TILESIZE - stats->getXPos();
+		xPos = tile->getXPos() + Globals::TILESIZE - xOverlap;
+	} else {
+		xOverlap = stats->getXPos() + stats->getWidth() - tile->getXPos();
+		xPos = stats->getXPos() + stats->getWidth() - xOverlap;
+	}
+
+	if (stats->getYPos() > tile->getYPos()) {
+		yOverlap = tile->getYPos() + Globals::TILESIZE - stats->getYPos();
+		yPos = tile->getYPos() + Globals::TILESIZE - yOverlap;
+	} else {
+		yOverlap = stats->getYPos() + stats->getHeight() - tile->getYPos();
+		yPos = stats->getYPos() + stats->getHeight() - yOverlap;
+	}
+
+	centerX = (xPos + xOverlap) / 2;
+	centerY = (yPos + yOverlap) / 2;
+	center.first = centerX;
+	center.second = centerY;
+
+	return center;
+
 }

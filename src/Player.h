@@ -26,8 +26,10 @@ public:
 	bool isJumping() { return jumping; };
 
 	enum Directions { UP, DOWN, LEFT, RIGHT };
-	enum KeyEventType { KEY_UP, KEY_DOWN };
+	enum KeyEventType { KEY_UP, KEY_DOWN, KEY_PRESSED };
 	enum State { STOPPED, MOVING_LEFT, MOVING_RIGHT, JUMPING };
+	enum Quadrant { TOP_LEFT_QUAD, TOP_RIGHT_QUAD, BOTTOM_LEFT_QUAD, BOTTOM_RIGHT_QUAD };
+	enum Axis { X, Y };
 
 private:
 	SDL_Rect srcRect;
@@ -53,10 +55,13 @@ private:
 	void updateCameraPosition(double dt, Camera* camera, int mapWidth, int mapHeight);
 
 	void boundPlayerToCamera(double dt, Camera* camera);
-	void checkCollisionWithTiles(std::vector<Tile*>);
-	void resolveCollision(Tile*);
+	void checkCollisionWithTiles(std::vector<Tile*>, Axis axis);
+	void resolveCollision(Tile* tile, Axis axis);
 
 	void handleEvents(std::unordered_set<int> actions, int keyEventType);
+
+	int getOverlappingQuadrant(Tile* tile);
+	std::pair<int, int> calcOverlapCenter(Tile* tile);
 };
 
 #endif /* SRC_PLAYER_H_ */
