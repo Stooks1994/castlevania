@@ -56,6 +56,7 @@ private:
 
 	void updatePlayerPosition(double dt, Camera* camera, int mapWidth, int mapHeight, std::vector<Tile*> _tiles);
 	void updateCameraPosition(double dt, Camera* camera, int mapWidth, int mapHeight);
+	void checkForAndUpdateJump();
 
 	void boundPlayerToCamera(double dt, Camera* camera);
 	void checkCollisionWithTiles(std::vector<Tile*>, Axis axis);

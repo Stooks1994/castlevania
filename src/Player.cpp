@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player(int x, int y, int ts) {
-	playerTexture = TextureManager::loadTexture("assets/red_knight.png");
+	playerTexture = TextureManager::loadTexture("assets/simon_walking.png");
 
 	red = TextureManager::loadTexture("assets/red.png");
 	currDirection = RIGHT;
@@ -14,7 +14,7 @@ Player::Player(int x, int y, int ts) {
 	animationTimer = 0.0;
 
 	inputManager = new InputManager();
-	stats = new Stats(0, 0, x, y, 350, -1500, -1500, 0.99, Globals::TILESIZE * 2, Globals::TILESIZE);
+	stats = new Stats(0, 0, x, y, 350, -1750, -1750, 0.99, Globals::TILESIZE * 2, Globals::TILESIZE);
 }
 
 Player::~Player() {
@@ -28,6 +28,18 @@ void Player::render(SDL_Renderer* rend, Camera* camera) {
 		Globals::SetRect(&srcRect, 16, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
 	}
 
+	if (state == STOPPED) {
+		Globals::SetRect(&srcRect, 0, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
+	} else if (state == MOVING_LEFT || state == MOVING_RIGHT) {
+		if (animationTimer < 0.1) {
+			Globals::SetRect(&srcRect, 0, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
+		} else if (animationTimer < 0.2) {
+			Globals::SetRect(&srcRect, 16, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
+		} else {
+			Globals::SetRect(&srcRect, 32, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
+		}
+	}
+
 	//animationManager->getAnimationFrame(state)
 
 	Globals::SetRect(&destRect, (int) stats->getXPos() - camera->xPos, (int) stats->getYPos() - camera->yPos, stats->getWidth(), stats->getHeight());
@@ -37,9 +49,11 @@ void Player::render(SDL_Renderer* rend, Camera* camera) {
 void Player::update(double dt, Camera* camera, int mapWidth, int mapHeight, std::vector<Tile*> _tiles) {
 	//animationManager->updateTimer(dt)
 
-	animationTimer += dt;
+	if (state == MOVING_LEFT || state == MOVING_RIGHT) {
+		animationTimer += dt;
+	}
 
-	if (animationTimer > 1) {
+	if (animationTimer > 0.3) {
 		animationTimer = 0;
 	}
 
@@ -50,15 +64,7 @@ void Player::update(double dt, Camera* camera, int mapWidth, int mapHeight, std:
 void Player::updatePlayerPosition(double dt, Camera* camera, int mapWidth, int mapHeight, std::vector<Tile*> _tiles) {
 	stats->setYVel(Globals::GRAVITY);
 
-	if (jumpKeyDown)  {
-		jump();
-	} else {
-		if (jumping) {
-			stats->setYVel(Globals::GRAVITY);
-		} else {
-			resetJumpForce();
-		}
-	}
+	checkForAndUpdateJump();
 
 	stats->incrementXPos(stats->getXVel() * dt);
 	checkCollisionWithTiles(_tiles, X);
@@ -66,13 +72,24 @@ void Player::updatePlayerPosition(double dt, Camera* camera, int mapWidth, int m
 	stats->incrementYPos(stats->getYVel() * dt);
 	checkCollisionWithTiles(_tiles, Y);
 
-	/*
-	stats->incrementXPos(stats->getXVel() * dt);
-	stats->incrementYPos(stats->getYVel() * dt);
-
-	checkCollisionWithTiles(_tiles);
-	*/
 	boundPlayerToCamera(dt, camera);
+}
+
+void Player::checkForAndUpdateJump() {
+	if (jumpKeyDown)  {
+		jump();
+	} else {
+		if (!jumping) {
+			resetJumpForce();
+		}
+		/*
+		if (jumping) {
+			stats->setYVel(Globals::GRAVITY);
+		} else {
+			resetJumpForce();
+		}
+		*/
+	}
 }
 
 void Player::updateCameraPosition(double dt, Camera* camera, int mapWidth, int mapHeight) {
@@ -113,7 +130,9 @@ void Player::handleEvents(std::unordered_set<int> actions, int keyEventType) {
 		}
 
 		if (Globals::Contains(actions, Globals::JUMP)) {
-			jumpKeyDown = true;
+			if (!jumping) {
+				jumpKeyDown = true;
+			}
 		} else {
 			jumpKeyDown = false;
 		}
@@ -131,12 +150,12 @@ void Player::movePlayer(int direction) {
 	case LEFT:
 		stats->incrementXVel(stats->getMovespeed() * -1);
 		state = MOVING_LEFT;
-		flip = SDL_FLIP_HORIZONTAL;
+		flip = SDL_FLIP_NONE;
 		break;
 	case RIGHT:
 		stats->incrementXVel(stats->getMovespeed());
 		state = MOVING_RIGHT;
-		flip = SDL_FLIP_NONE;
+		flip = SDL_FLIP_HORIZONTAL;
 		break;
 	}
 }
@@ -222,6 +241,7 @@ void Player::resolveCollision(Tile* tile, Axis axis) {
 			if (yVel < 0) {
 				yOverlap = tile->getYPos() + Globals::TILESIZE - stats->getYPos();
 				stats->incrementYPos(yOverlap);
+				jumpKeyDown = false; //Bonked head on block
 			} else {
 				yOverlap = stats->getYPos() + stats->getHeight() - tile->getYPos();
 				stats->incrementYPos(yOverlap * -1);
