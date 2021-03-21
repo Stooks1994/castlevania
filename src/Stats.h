@@ -5,7 +5,17 @@ class Stats {
 
 public:
 	Stats();
-	Stats(double, double, double, double, double, double, double, double, int, int);
+	Stats(double _xVel,
+			double _yVel,
+			double _xPos,
+			double _yPos,
+			double _movespeed,
+			double _jumpForce,
+			double _jumpForceMax,
+			double _jumpDampening,
+			int _height,
+			int _width);
+
 	virtual ~Stats();
 
 	double getXVel() { return xVel; };

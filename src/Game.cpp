@@ -28,6 +28,7 @@ void Game::init(const char* title, int windowXPos, int windowYPos, int windowWid
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 		window = SDL_CreateWindow(title, windowXPos, windowYPos, windowWidth, windowHeight, flags);
 		renderer = SDL_CreateRenderer(window, -1, 0);
+		SDL_RenderSetLogicalSize(renderer, 800, 640);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		isRunning = true;
 	} else {
@@ -75,25 +76,6 @@ void Game::render(SDL_Renderer* rend) {
 }
 
 void Game::handleEvents() {
-	/*
-	while(SDL_PollEvent(&event) != 0) {
-		if (event.type == SDL_QUIT)
-			isRunning = false;
-
-		switch(Game::currScene) {
-		case MAIN_MENU:
-			updateScene(mainMenu->handleEvents(Game::event));
-			break;
-		case IN_GAME:
-			updateScene(entityManager->handleEvents(Game::event));
-			break;
-		case PAUSE_MENU:
-			break;
-		default:
-			break;
-		}
-	}
-	*/
 	switch(Game::currScene) {
 	case MAIN_MENU:
 		updateScene(mainMenu->handleEvents(Game::event));

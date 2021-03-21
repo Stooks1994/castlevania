@@ -9,7 +9,8 @@ ControlMapper::ControlMapper() {
 			{ SDLK_w, Globals::UP },
 			{ SDLK_s, Globals::DOWN },
 			{ SDLK_SPACE, Globals::JUMP },
-			{ SDLK_RETURN, Globals::SELECT }
+			{ SDLK_RETURN, Globals::SELECT },
+			{ SDLK_ESCAPE, Globals::QUIT }
 	};
 
 	controlMap = defaultControlMap;

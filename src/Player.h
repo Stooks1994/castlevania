@@ -34,6 +34,7 @@ public:
 private:
 	SDL_Rect srcRect;
 	SDL_Rect destRect;
+	SDL_RendererFlip flip;
 	SDL_Texture* playerTexture;
 	SDL_Texture* red;
 	InputManager* inputManager;
@@ -41,6 +42,8 @@ private:
 
 	int currDirection;
 	int state;
+
+	double animationTimer;
 
 	bool jumping;
 	bool jumpKeyDown;

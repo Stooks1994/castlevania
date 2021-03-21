@@ -27,6 +27,6 @@ void EntityManager::update(double dt) {
 }
 
 int EntityManager::handleEvents(SDL_Event event) {
-	player->handleEvents(event);
-	return 1;
+	return player->handleEvents(event);
+	//return 1;
 }

@@ -1,14 +1,17 @@
 #include "Player.h"
 
 Player::Player(int x, int y, int ts) {
-	playerTexture = TextureManager::loadTexture("assets/knight_left.png");
+	playerTexture = TextureManager::loadTexture("assets/red_knight.png");
 
 	red = TextureManager::loadTexture("assets/red.png");
 	currDirection = RIGHT;
 	state = STOPPED;
+	flip = SDL_FLIP_NONE;
 
 	jumping = true;
 	jumpKeyDown = false;
+
+	animationTimer = 0.0;
 
 	inputManager = new InputManager();
 	stats = new Stats(0, 0, x, y, 350, -1500, -1500, 0.99, Globals::TILESIZE * 2, Globals::TILESIZE);
@@ -19,12 +22,27 @@ Player::~Player() {
 }
 
 void Player::render(SDL_Renderer* rend, Camera* camera) {
-	Globals::SetRect(&srcRect, 0, 0, Globals::TILESIZE, Globals::TILESIZE);
+	if (animationTimer < 0.5) {
+		Globals::SetRect(&srcRect, 0, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
+	} else {
+		Globals::SetRect(&srcRect, 16, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
+	}
+
+	//animationManager->getAnimationFrame(state)
+
 	Globals::SetRect(&destRect, (int) stats->getXPos() - camera->xPos, (int) stats->getYPos() - camera->yPos, stats->getWidth(), stats->getHeight());
-	SDL_RenderCopy(rend, playerTexture, &srcRect, &destRect);
+	SDL_RenderCopyEx(rend, playerTexture, &srcRect, &destRect, 0, NULL, flip);
 }
 
 void Player::update(double dt, Camera* camera, int mapWidth, int mapHeight, std::vector<Tile*> _tiles) {
+	//animationManager->updateTimer(dt)
+
+	animationTimer += dt;
+
+	if (animationTimer > 1) {
+		animationTimer = 0;
+	}
+
 	updatePlayerPosition(dt, camera, mapWidth, mapHeight, _tiles);
 	updateCameraPosition(dt, camera, mapWidth, mapHeight);
 }
@@ -113,10 +131,12 @@ void Player::movePlayer(int direction) {
 	case LEFT:
 		stats->incrementXVel(stats->getMovespeed() * -1);
 		state = MOVING_LEFT;
+		flip = SDL_FLIP_HORIZONTAL;
 		break;
 	case RIGHT:
 		stats->incrementXVel(stats->getMovespeed());
 		state = MOVING_RIGHT;
+		flip = SDL_FLIP_NONE;
 		break;
 	}
 }
