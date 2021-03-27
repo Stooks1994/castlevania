@@ -15,7 +15,7 @@ Player::Player(int x, int y, int ts) {
 	animationTimer = 0.0;
 
 	inputManager = new InputManager();
-	stats = new Stats(0, 0, x, y, 300, -1750, -1750, 0.99, Globals::TILESIZE * 2, Globals::TILESIZE);
+	stats = new Stats(0, 0, x, y, 250, -1750, -1750, 0.99, Globals::TILESIZE * 2, Globals::TILESIZE);
 }
 
 Player::~Player() {
@@ -29,8 +29,10 @@ void Player::render(SDL_Renderer* rend, Camera* camera) {
 		Globals::SetRect(&srcRect, 16, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
 	}
 
-	if (state == STOPPED) {
+	if (state == STOPPED && !jumping) {
 		Globals::SetRect(&srcRect, 0, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
+	} else if (jumping) {
+			Globals::SetRect(&srcRect, 48, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
 	} else if (state == MOVING_LEFT || state == MOVING_RIGHT) {
 		if (animationTimer < 0.1) {
 			Globals::SetRect(&srcRect, 0, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
@@ -39,6 +41,8 @@ void Player::render(SDL_Renderer* rend, Camera* camera) {
 		} else {
 			Globals::SetRect(&srcRect, 32, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
 		}
+	} else if (state == CROUCHING) {
+		Globals::SetRect(&srcRect, 48, 0, Globals::TILESIZE / 2, Globals::TILESIZE);
 	}
 
 	//animationManager->getAnimationFrame(state)
@@ -128,6 +132,12 @@ void Player::handleEvents(std::unordered_set<int> actions, int keyEventType) {
 
 		if (Globals::Contains(actions, Globals::RIGHT)) {
 			movePlayer(RIGHT);
+		}
+
+		if (Globals::Contains(actions, Globals::DOWN)) {
+			state = CROUCHING;
+		} else if (state == CROUCHING) {
+			state = STOPPED;
 		}
 
 		if (Globals::Contains(actions, Globals::JUMP)) {

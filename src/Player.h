@@ -27,7 +27,7 @@ public:
 
 	enum Directions { UP, DOWN, LEFT, RIGHT };
 	enum KeyEventType { KEY_UP, KEY_DOWN, KEY_PRESSED };
-	enum State { STOPPED, MOVING_LEFT, MOVING_RIGHT, JUMPING };
+	enum State { STOPPED, MOVING_LEFT, MOVING_RIGHT, JUMPING, CROUCHING };
 	enum Quadrant { TOP_LEFT_QUAD, TOP_RIGHT_QUAD, BOTTOM_LEFT_QUAD, BOTTOM_RIGHT_QUAD };
 	enum Axis { X, Y };
 
