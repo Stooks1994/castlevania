@@ -8,6 +8,8 @@ EntityManager* Game::entityManager;
 
 int Game::resolutionX = 800;
 int Game::resolutionY = 640;
+int Game::logicalResX = 800;
+int Game::logicalResY = 640;
 int Game::currScene = MAIN_MENU;
 
 Game::Game() {
@@ -28,15 +30,17 @@ void Game::init(const char* title, int windowXPos, int windowYPos, int windowWid
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 		window = SDL_CreateWindow(title, windowXPos, windowYPos, windowWidth, windowHeight, flags);
 		renderer = SDL_CreateRenderer(window, -1, 0);
-		SDL_RenderSetLogicalSize(renderer, 800, 640);
+		SDL_RenderSetLogicalSize(renderer, Game::logicalResX, Game::logicalResY);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		isRunning = true;
 	} else {
 		isRunning = false;
 	}
 
-	Game::mainMenu = new MainMenu(Game::resolutionX, Game::resolutionY);
-	Game::entityManager = new EntityManager(tileSize, Game::resolutionX, Game::resolutionY);
+	//Game::mainMenu = new MainMenu(Game::resolutionX, Game::resolutionY);
+	//Game::entityManager = new EntityManager(tileSize, Game::resolutionX, Game::resolutionY);
+	Game::mainMenu = new MainMenu(Game::logicalResX, Game::logicalResY);
+	Game::entityManager = new EntityManager(tileSize, Game::logicalResX, Game::logicalResY);
 }
 
 void Game::update(double dt) {

@@ -28,6 +28,9 @@ public:
 
 	void update(double dt);
 
+	std::pair<int, int> getPlayerSpawn() { return level->getPlayerSpawn(); };
+
+
 private:
 	SDL_Rect srcRect, destRect;
 	SDL_Texture* mapTexture;

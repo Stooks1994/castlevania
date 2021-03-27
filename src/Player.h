@@ -40,7 +40,8 @@ private:
 	InputManager* inputManager;
 	Stats* stats;
 
-	int currDirection;
+	int xDirection;
+	int yDirection;
 	int state;
 
 	double animationTimer;

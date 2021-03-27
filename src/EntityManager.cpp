@@ -2,8 +2,11 @@
 
 EntityManager::EntityManager(int ts, int resX, int resY) {
 	tileSize = ts;
-	player = new Player(50, 50, ts);
 	map = new Map("assets/trees.png");
+
+	std::pair<int, int> playerSpawn = map->getPlayerSpawn();
+
+	player = new Player(playerSpawn.first, playerSpawn.second, ts);
 	camera = new Camera(0.0, 0.0, resX, resY);
 
 	resolutionX = resX;

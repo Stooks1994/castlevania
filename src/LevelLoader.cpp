@@ -102,7 +102,7 @@ int LevelLoader::parseMap(std::string _line) {
 		currStr.push_back(currChar);
 		std::string legendValue = legend[currStr];
 
-		if (legendValue.compare("BACKGROUND") != 0) {
+		if (legendValue.compare("BACKGROUND") != 0 && legendValue.compare("SPAWN") != 0) {
 			Tile* tile = new Tile(
 				Globals::TILESIZE * column,
 				Globals::TILESIZE * mapLineNumber,
@@ -113,6 +113,9 @@ int LevelLoader::parseMap(std::string _line) {
 			);
 
 			tiles.push_back(tile);
+		} else if (legendValue.compare("SPAWN") == 0) {
+			playerSpawn.first = Globals::TILESIZE * column;
+			playerSpawn.second = Globals::TILESIZE * mapLineNumber;
 		}
 	}
 

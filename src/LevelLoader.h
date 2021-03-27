@@ -25,6 +25,7 @@ public:
 
 	SDL_Texture* getBackgroundTexture() { return backgroundTexture; };
 	std::vector<Tile*> getTiles() { return tiles; };
+	std::pair<int, int> getPlayerSpawn() { return playerSpawn; };
 
 	enum Headers { SETTINGS, LEGEND, MAP, ENEMIES, END };
 
@@ -37,6 +38,8 @@ private:
 
 	SDL_Texture* tileset;
 	SDL_Texture* backgroundTexture;
+
+	std::pair<int, int> playerSpawn;
 
 	int mapLineNumber;
 	int levelWidth;

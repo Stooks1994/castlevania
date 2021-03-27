@@ -4,7 +4,8 @@ Player::Player(int x, int y, int ts) {
 	playerTexture = TextureManager::loadTexture("assets/simon_walking.png");
 
 	red = TextureManager::loadTexture("assets/red.png");
-	currDirection = RIGHT;
+	xDirection = RIGHT;
+	yDirection = DOWN;
 	state = STOPPED;
 	flip = SDL_FLIP_NONE;
 
@@ -14,7 +15,7 @@ Player::Player(int x, int y, int ts) {
 	animationTimer = 0.0;
 
 	inputManager = new InputManager();
-	stats = new Stats(0, 0, x, y, 350, -1750, -1750, 0.99, Globals::TILESIZE * 2, Globals::TILESIZE);
+	stats = new Stats(0, 0, x, y, 300, -1750, -1750, 0.99, Globals::TILESIZE * 2, Globals::TILESIZE);
 }
 
 Player::~Player() {
@@ -97,9 +98,9 @@ void Player::updateCameraPosition(double dt, Camera* camera, int mapWidth, int m
 		camera->moveCamera(stats->getXVel(), stats->getYVel(), dt, mapWidth, mapHeight);
 	else if (stats->getXPos() > (camera->xPos + 0.66 * camera->width) && state == MOVING_RIGHT)
 		camera->moveCamera(stats->getXVel(), stats->getYVel(), dt, mapWidth, mapHeight);
-	else if (stats->getYPos() < (camera->yPos + 0.33 * camera->height) && currDirection == UP)
+	else if (stats->getYPos() < (camera->yPos + 0.33 * camera->height) && yDirection == UP)
 		camera->moveCamera(stats->getXVel(), stats->getYVel(), dt, mapWidth, mapHeight);
-	else if (stats->getXPos() > (camera->yPos + 0.66 * camera->height) && currDirection == DOWN)
+	else if (stats->getXPos() > (camera->yPos + 0.66 * camera->height) && yDirection == DOWN)
 		camera->moveCamera(stats->getXVel(), stats->getYVel(), dt, mapWidth, mapHeight);
 }
 

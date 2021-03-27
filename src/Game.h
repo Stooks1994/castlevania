@@ -28,6 +28,8 @@ public:
 
 	static int resolutionX;
 	static int resolutionY;
+	static int logicalResX;
+	static int logicalResY;
 	static int currScene;
 
 	static const int tileSize = 32;
