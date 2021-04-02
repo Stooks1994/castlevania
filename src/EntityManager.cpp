@@ -45,8 +45,8 @@ void EntityManager::centerCameraOnPlayer() {
 	int cameraH = camera->height;
 
 	// Try to center player on camera
-	camera->xPos = playerX - (cameraW / 2);
-	camera->yPos = playerY - (cameraH / 2);
+	camera->xPos = (int) (playerX - (cameraW / 2));
+	camera->yPos = (int) (playerY - (cameraH / 2));
 
 	if (camera->xPos < 0)
 		camera->xPos = 0;
