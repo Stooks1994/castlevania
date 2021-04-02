@@ -12,8 +12,12 @@ public:
 	Globals();
 	virtual ~Globals();
 
+	const static int WINDOW_X = 1280;
+	const static int WINDOW_Y = 720;
+	const static int RESOLUTION_X = 640;
+	const static int RESOLUTION_Y = 360;
 	const static int TILESIZE = 32;
-	const static int GRAVITY = 500;
+	const static int GRAVITY = RESOLUTION_Y / 1.5;
 	const static int KEYBOARD_SIZE = 282;
 
 	static void SetRect(SDL_Rect* rect, int x, int y, int w, int h);

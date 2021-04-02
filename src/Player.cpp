@@ -15,7 +15,7 @@ Player::Player(int x, int y, int ts) {
 	animationTimer = 0.0;
 
 	inputManager = new InputManager();
-	stats = new Stats(0, 0, x, y, 250, -1750, -1750, 0.99, Globals::TILESIZE * 2, Globals::TILESIZE);
+	stats = new Stats(0, 0, x, y, Globals::RESOLUTION_X / 3, Globals::GRAVITY * -3, Globals::GRAVITY * -3, 0.996, Globals::TILESIZE * 2, Globals::TILESIZE);
 }
 
 Player::~Player() {
@@ -63,7 +63,7 @@ void Player::update(double dt, Camera* camera, int mapWidth, int mapHeight, std:
 	}
 
 	updatePlayerPosition(dt, camera, mapWidth, mapHeight, _tiles);
-	updateCameraPosition(dt, camera, mapWidth, mapHeight);
+	//updateCameraPosition(dt, camera, mapWidth, mapHeight);
 }
 
 void Player::updatePlayerPosition(double dt, Camera* camera, int mapWidth, int mapHeight, std::vector<Tile*> _tiles) {
@@ -87,13 +87,13 @@ void Player::checkForAndUpdateJump() {
 		if (!jumping) {
 			resetJumpForce();
 		}
-		/*
-		if (jumping) {
-			stats->setYVel(Globals::GRAVITY);
-		} else {
-			resetJumpForce();
-		}
-		*/
+	}
+
+	if (jumping) {
+		if (stats->getYVel() > 0)
+			yDirection = DOWN;
+		else
+			yDirection = UP;
 	}
 }
 
@@ -182,6 +182,10 @@ void Player::jump() {
 	jumping = true;
 	stats->incrementYVel(stats->getJumpForce());
 	stats->setJumpForce(stats->getJumpForce() * stats->getJumpDampening());
+
+	if (stats->getYVel() > 0) {
+		stats->incrementYVel((int) Globals::GRAVITY * 0.25);
+	}
 }
 
 void Player::boundPlayerToCamera(double dt, Camera* camera) {

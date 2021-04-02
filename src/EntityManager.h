@@ -28,6 +28,9 @@ private:
 	int mapHeight;
 	int mapWidth;
 
+	void startCameraOnPlayer(Stats* stats);
+	void centerCameraOnPlayer();
+
 };
 
 #endif /* SRC_ENTITYMANAGER_H_ */

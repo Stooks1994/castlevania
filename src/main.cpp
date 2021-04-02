@@ -1,12 +1,13 @@
 #include <iostream>
 #include "Game.h"
 #include "InputManager.h"
+#include "Globals.h"
 
 Game* game = nullptr;
 
 int main(int argc, const char* argv[]) {
 	game = new Game();
-	game->init("CastleVania", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Game::resolutionX, Game::resolutionY, false);
+	game->init("CastleVania", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Globals::WINDOW_X, Globals::WINDOW_Y, false);
 
 	Uint32 minimum_t = 1000 / 6;
 	Uint32 dt = 0;

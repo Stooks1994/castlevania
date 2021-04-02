@@ -25,6 +25,8 @@ public:
 
 	bool isJumping() { return jumping; };
 
+	Stats* getStats() { return stats; };
+
 	enum Directions { UP, DOWN, LEFT, RIGHT };
 	enum KeyEventType { KEY_UP, KEY_DOWN, KEY_PRESSED };
 	enum State { STOPPED, MOVING_LEFT, MOVING_RIGHT, JUMPING, CROUCHING };
